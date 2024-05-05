@@ -1,0 +1,7 @@
+version: "3"
+services:
+  fuzzing:
+    container_name: fuzzing
+    build:
+      context: .
+      dockerfile: fuzzing/Dockerfile
