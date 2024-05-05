@@ -1,0 +1,10 @@
+version: "3"
+services:
+  asmhost:
+    container_name: asmhost
+    build:
+      context: .
+      dockerfile: test/Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
