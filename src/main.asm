@@ -11,6 +11,8 @@ indexFilename db 'index.html', 0h
 indexFilenameLength equ $ - indexFilename
 failedToBindErrorString db 'Failed to bind', 0h
 number404 db '404', 0h
+intro db 'Listening on port ', 0h
+defaultIntro db 'Listening on port 9001', 0h
 
 number200 db '200', 0h
 number400 db '400', 0h
@@ -73,6 +75,12 @@ _bind:
     pop edx ; get the port
     pop edx
     push eax ; save the socket descriptor
+    mov eax, intro
+    call sprint
+    mov eax, edx ; move the port into eax
+    call sprint
+    mov eax, newline
+    call sprint
     mov ebx, edx ; move the port into eax
     call atoi
     pop edx ; restore the socket descriptor
@@ -94,7 +102,13 @@ _bind:
     jmp _listen
 
 .defaultPort:
-    mov     edi, eax ; 
+    push eax ; save the socket descriptor
+    mov eax, defaultIntro
+    call sprint
+    mov eax, newline
+    call sprint
+    pop eax
+    mov     edi, eax ;
     push    dword 0x00000000 ; 0.0.0.0
     push    word 0x2923 ; port 9001
     push    word 2

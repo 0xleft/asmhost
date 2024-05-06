@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-curl https://raw.githubusercontent.com/0xleft/asmhost/master/install.sh | sudo sh
+curl -sSL https://raw.githubusercontent.com/0xleft/asmhost/master/install.sh | sudo sh
 ```
 
 ## Run
