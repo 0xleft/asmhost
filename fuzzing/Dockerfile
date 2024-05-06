@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile-upstream:master-labs
 FROM ubuntu:18.04 as afl-builder
 
 RUN apt-get update
@@ -8,24 +7,30 @@ RUN apt-get -y install sudo \
     openssl \
     clang \
     graphviz-dev \
-    libcap-dev
+    libcap-dev \
+    libtool-bin \
+    wget \
+    python \
+    automake \
+    autoconf \
+    bison \
+    libglib2.0-dev
 
 # Download and compile AFLNet
-ENV LLVM_CONFIG="llvm-config-6.0"
+# ENV LLVM_CONFIG="llvm-config-6.0"
 
-ADD --keep-git-dir=true https://github.com/aflnet/aflnet.git /opt/aflnet
+ADD --keep-git-dir=true https://github.com/0xleft/aflnet.git /opt/aflnet
 WORKDIR /opt/aflnet
 
 RUN make clean all && \
-    cd llvm_mode && \
-    make
+    cd qemu_mode && \
+    chmod +x build_qemu_support.sh && \
+    ./build_qemu_support.sh
 
 # Set up environment variables for AFLNet
 ENV AFLNET="/opt/aflnet"
 ENV PATH="${PATH}:${AFLNET}"
 ENV AFL_PATH="${AFLNET}"
-ENV AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
-    AFL_SKIP_CPUFREQ=1
 
 FROM ubuntu:18.04 as target-builder
 
@@ -43,13 +48,16 @@ FROM ubuntu:18.04 as runner
 
 WORKDIR /app
 
-COPY --from=afl-builder /opt/aflnet/afl-fuzz /usr/bin/afl-fuzz
-COPY --from=afl-builder /opt/aflnet/afl-clang-fast /usr/bin/afl-clang-fast
-COPY --from=afl-builder /opt/aflnet/afl-replay /usr/bin/afl-replay
+RUN apt-get update && apt-get -y install graphviz-dev libcap-dev
 
-COPY --from=target-builder /app/src/main .
+COPY --from=afl-builder /opt/aflnet /opt/aflnet
+COPY --from=target-builder /app/fuzzing /app/fuzzing
+COPY --from=target-builder /app/src/main /usr/bin/main
+RUN chmod +x /usr/bin/main
 
 COPY ./test .
 COPY ./fuzzing/fuzz.sh .
+
+RUN chmod +x fuzz.sh
 
 CMD ["./fuzz.sh"]

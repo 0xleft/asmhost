@@ -5,3 +5,5 @@ services:
     build:
       context: .
       dockerfile: fuzzing/Dockerfile
+    volumes:
+      - ./fuzzing/out-asmhost:/app/out-asmhost
