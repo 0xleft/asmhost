@@ -20,7 +20,7 @@ if [ "$1" == "fuzz" ]; then
     fi
     if [ "$2" == "" ]; then # up
         echo "Running fuzzing..."
-        sudo docker compose -f "fuzzing.docker-compose.yml" up -d --build
+        sudo docker compose -f "fuzzing.docker-compose.yml" -d up --build
         exit 0
     fi
 fi
