@@ -13,6 +13,7 @@ failedToBindErrorString db 'Failed to bind', 0h
 number404 db '404', 0h
 intro db 'Listening on port ', 0h
 defaultIntro db 'Listening on port 9001', 0h
+badPort db 'Invalid port', 0h
 
 number200 db '200', 0h
 number400 db '400', 0h
@@ -83,6 +84,21 @@ _bind:
     call sprint
     mov ebx, edx ; move the port into eax
     call atoi
+    cmp eax, 0
+    jl .badPort
+    cmp eax, 65535
+    jg .badPort
+
+    jmp .goodPort
+
+.badPort:
+    mov eax, badPort
+    call sprint
+    mov eax, newline
+    call sprint
+    call quit
+
+.goodPort:
     pop edx ; restore the socket descriptor
 
     mov edi, edx ; move the socket descriptor into edi
