@@ -1,12 +1,13 @@
 SECTION .data
+
 ; if not found
-response404 db 'HTTP/1.1 404 Not Found', 0Ah, 'Content-Type: text/html', 0Ah, 'Content-Length: 14', 0Ah, 0Ah, '404 Not Found', 0Ah
+response404 db 'HTTP/1.1 404 Not Found', 0Ah, 'Content-Type: text/html', 0Ah, 'Content-Length: 14', 0Ah, 'Server: asmhost', 0Ah, 0Ah, '404 Not Found', 0Ah
 response404Len equ $ - response404
 
-response400 db 'HTTP/1.1 400 Bad Request', 0Ah, 'Content-Type: text/html', 0Ah, 'Content-Length: 16', 0Ah, 0Ah, '400 Bad Request', 0Ah
+response400 db 'HTTP/1.1 400 Bad Request', 0Ah, 'Content-Type: text/html', 0Ah, 'Content-Length: 16', 0Ah, 'Server: asmhost', 0Ah, 0Ah, '400 Bad Request', 0Ah
 response400Len equ $ - response400
 
-responseStart db 'HTTP/1.1 200 OK', 0Ah, 'Content-Type: text/html', 0Ah, 'Content-Length: '
+responseStart db 'HTTP/1.1 200 OK', 0Ah, 'Server: asmhost', 0Ah, 'Content-Length: '
 responseStartLength equ $ - responseStart
 responseMiddle db '', 0Ah, 0Ah
 responseMiddleLength equ $ - responseMiddle
