@@ -430,9 +430,18 @@ _invalidRequest:
     jmp _close.main
 
 _close:
-    pop ebx
+    pop ebx ; socket file descriptor
 
 .main:
+
+    ; send a few newlines
+    mov ecx, newline
+    mov edx, 1
+    call _commitWrite
+    call _commitWrite
+    call _commitWrite
+    call _commitWrite
+
     mov eax, 48
     mov ecx, 2
     int 0x80
