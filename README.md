@@ -22,3 +22,7 @@ chmod +x task.sh
 ./task.sh test
 # ./task.sh test d # to stop container
 ```
+
+# Demo
+
+Demo instance running at [http://194.135.88.67:8080/](http://194.135.88.67:8080/) you can download file bakkesmod.dll at [http://194.135.88.67:8080/bakkesmod.dll](http://194.135.88.67:8080/bakkesmod.dll) as an example
